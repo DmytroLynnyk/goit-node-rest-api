@@ -5,8 +5,8 @@ import mongoose from "mongoose";
 
 import contactsRouter from "./routes/contactsRouter.js";
 
-const BD_HOST =
-  "mongodb+srv://DimDim:Borntorun@cluster0.0ad7unn.mongodb.net/db-contacts?retryWrites=true&w=majority&appName=Cluster0";
+const { BD_HOST } = process.env;
+mongoose.set("strictQuery", true);
 mongoose
   .connect(BD_HOST)
   .then(() => {
