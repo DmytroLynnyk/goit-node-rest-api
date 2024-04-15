@@ -15,7 +15,13 @@ export const getAllContacts = async (_, res, next) => {
 
 export const getOneContact = async (req, res, next) => {
   try {
-    const result = await Contact.findById(req.params.contactId);
+    const searchedId = req.params.contactId;
+    const result = await Contact.findById(searchedId);
+
+    if (result === null) {
+      throw HttpError(404, `The contact with ID ${searchedId} is not found`);
+    }
+
     res.json(result);
   } catch (err) {
     next(err);
