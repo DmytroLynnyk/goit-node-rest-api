@@ -18,10 +18,6 @@ export const getOneContact = async (req, res, next) => {
     const searchedId = req.params.contactId;
     const result = await Contact.findById(searchedId);
 
-    if (result === null) {
-      throw HttpError(404, `The contact with ID ${searchedId} is not found`);
-    }
-
     res.json(result);
   } catch (err) {
     next(err);
