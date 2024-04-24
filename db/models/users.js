@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
-import { handleMongooseError } from "../helpers/handleMongooseError.js";
+import { handleMongooseError } from "../../helpers/handleMongooseError.js";
+import bcryptjs from "bcryptjs";
 
 const userSchema = new Schema(
   {
@@ -29,4 +30,8 @@ const userSchema = new Schema(
 
 userSchema.post("save", handleMongooseError);
 
-export const User = model("contact", userSchema);
+userSchema.methods.hashPassword = async function () {
+  this.password = await bcryptjs.hash(this.password, 10);
+};
+
+export const User = model("user", userSchema);
