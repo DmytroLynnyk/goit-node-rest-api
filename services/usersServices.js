@@ -8,7 +8,7 @@ export const findUserByEmail = async (email) => {
 
 const updateUserWithToken = async (id) => {
   const { SECRET_KEY } = process.env;
-  const token = jsonWebToken.sign({ id }, SECRET_KEY);
+  const token = jsonWebToken.sign({ id }, SECRET_KEY, { expiresIn: "24h" });
   const user = await User.findByIdAndUpdate(id, { token }, { new: true });
   return user;
 };
