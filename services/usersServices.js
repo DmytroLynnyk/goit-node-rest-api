@@ -12,7 +12,7 @@ export const signToken = (id) => {
   return jwt.sign({ id }, SECRET_KEY, { expiresIn: "12h" });
 };
 
-const verifyToken = async (token) => {
+export const verifyToken = async (token) => {
   return await jwt.verify(token, SECRET_KEY);
 };
 

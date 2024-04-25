@@ -3,6 +3,7 @@ import {
   findUserByEmail,
   createUser,
   updateUserWithToken,
+  verifyToken,
 } from "../services/usersServices.js";
 
 export const createNewUser = async (req, res, next) => {
@@ -25,7 +26,7 @@ export const createNewUser = async (req, res, next) => {
   }
 };
 
-export const login = async (req, res, next) => {
+export const loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const result = await findUserByEmail(email);
@@ -43,6 +44,23 @@ export const login = async (req, res, next) => {
         subscription: user.subscription,
       },
     });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
+export const getCurrentUser = async (req, res, next) => {
+  try {
+    const { email, subscription } = req.user;
+    res.status(200).json({
+      user: {
+        email,
+        subscription,
+      },
+    });
+    // console.log(req.user);
+    // next();
   } catch (err) {
     console.log(err);
     next(err);
