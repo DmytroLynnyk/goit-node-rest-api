@@ -1,16 +1,32 @@
 import { User } from "../db/models/users.js";
-import jsonWebToken from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+
+const { SECRET_KEY } = process.env;
 
 export const findUserByEmail = async (email) => {
   const user = await User.findOne({ email });
   return user;
 };
 
-const updateUserWithToken = async (id) => {
-  const { SECRET_KEY } = process.env;
-  const token = jsonWebToken.sign({ id }, SECRET_KEY, { expiresIn: "24h" });
+export const signToken = (id) => {
+  return jwt.sign({ id }, SECRET_KEY, { expiresIn: "12h" });
+};
+
+const verifyToken = async (token) => {
+  return await jwt.verify(token, SECRET_KEY);
+};
+
+export const updateUserWithToken = async (id) => {
+  const token = signToken(id);
   const user = await User.findByIdAndUpdate(id, { token }, { new: true });
   return user;
+};
+
+export const checkUserData = async (userData) => {
+  const { email, password } = userData;
+  const user = findUserByEmail(email);
+  if (!user || !user.comparePassword(password))
+    throw HttpError(401, "Email or password is wrong");
 };
 
 export const createUser = async (userData) => {

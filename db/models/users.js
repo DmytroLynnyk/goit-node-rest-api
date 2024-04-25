@@ -34,4 +34,8 @@ userSchema.methods.hashPassword = async function () {
   this.password = await bcryptjs.hash(this.password, 10);
 };
 
+userSchema.methods.comparePassword = function (password) {
+  return bcryptjs.compareSync(password, this.password);
+};
+
 export const User = model("user", userSchema);

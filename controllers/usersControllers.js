@@ -1,5 +1,9 @@
 import HttpError from "../helpers/HttpError.js";
-import { findUserByEmail, createUser } from "../services/usersServices.js";
+import {
+  findUserByEmail,
+  createUser,
+  updateUserWithToken,
+} from "../services/usersServices.js";
 
 export const createNewUser = async (req, res, next) => {
   try {
@@ -14,6 +18,30 @@ export const createNewUser = async (req, res, next) => {
 
     res.status(201).json({
       user: { email: user.email, subscription: user.subscription },
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
+export const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const result = await findUserByEmail(email);
+
+    if (!result || !result.comparePassword(password)) {
+      throw HttpError(401, "Email or password is wrong");
+    }
+
+    const user = await updateUserWithToken(result._id);
+
+    res.status(200).json({
+      token: user.token,
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+      },
     });
   } catch (err) {
     console.log(err);
