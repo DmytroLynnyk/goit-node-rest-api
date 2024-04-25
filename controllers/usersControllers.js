@@ -3,7 +3,6 @@ import {
   findUserByEmail,
   createUser,
   updateUserWithToken,
-  verifyToken,
 } from "../services/usersServices.js";
 
 export const createNewUser = async (req, res, next) => {
@@ -29,8 +28,8 @@ export const createNewUser = async (req, res, next) => {
 export const loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const result = await findUserByEmail(email);
 
+    const result = await findUserByEmail(email);
     if (!result || !result.comparePassword(password)) {
       throw HttpError(401, "Email or password is wrong");
     }
@@ -59,8 +58,6 @@ export const getCurrentUser = async (req, res, next) => {
         subscription,
       },
     });
-    // console.log(req.user);
-    // next();
   } catch (err) {
     console.log(err);
     next(err);

@@ -14,16 +14,27 @@ import {
 } from "../schemas/contactsSchemas.js";
 import validateBody from "../helpers/validateBody.js";
 import { isValidId } from "../middleware/isValidId.js";
+import { isAuthorizedUser } from "../middleware/isAuthorizedUser.js";
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", getAllContacts);
+contactsRouter.get("/", isAuthorizedUser, getAllContacts);
 
-contactsRouter.get("/:contactId", isValidId, getOneContact);
+contactsRouter.get("/:contactId", isAuthorizedUser, isValidId, getOneContact);
 
-contactsRouter.delete("/:contactId", isValidId, deleteContact);
+contactsRouter.delete(
+  "/:contactId",
+  isAuthorizedUser,
+  isValidId,
+  deleteContact
+);
 
-contactsRouter.post("/", validateBody(createContactSchema), createContact);
+contactsRouter.post(
+  "/",
+  isAuthorizedUser,
+  validateBody(createContactSchema),
+  createContact
+);
 
 contactsRouter.put(
   "/:contactId",

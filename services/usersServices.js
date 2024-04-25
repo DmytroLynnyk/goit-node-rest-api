@@ -22,13 +22,6 @@ export const updateUserWithToken = async (id) => {
   return user;
 };
 
-export const checkUserData = async (userData) => {
-  const { email, password } = userData;
-  const user = findUserByEmail(email);
-  if (!user || !user.comparePassword(password))
-    throw HttpError(401, "Email or password is wrong");
-};
-
 export const createUser = async (userData) => {
   const newUser = new User(userData);
   await newUser.hashPassword();
