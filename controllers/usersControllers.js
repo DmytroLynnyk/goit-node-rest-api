@@ -85,14 +85,12 @@ export const changeUserSubscription = async (req, res, next) => {
       subscription: req.user.subscription,
     });
 
-    res
-      .status(200)
-      .json({
-        user: {
-          email: newSubscription.email,
-          subscription: newSubscription.subscription,
-        },
-      });
+    res.status(200).json({
+      user: {
+        email: newSubscription.email,
+        subscription: newSubscription.subscription,
+      },
+    });
   } catch (err) {
     console.log(err);
     next(err);
