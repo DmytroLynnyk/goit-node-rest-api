@@ -1,12 +1,19 @@
 import HttpError from "../helpers/HttpError.js";
 import { Contact } from "../db/models/contacts.js";
 
-export const getAllContacts = async (_, res, next) => {
+export const getAllContacts = async (req, res, next) => {
   try {
-    const result = await Contact.find();
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (page - 1) * limit;
+    const result = await Contact.find({ favorite: true }, "", {
+      skip,
+      limit: Number(limit),
+    });
+
     if (!result.length) {
       throw HttpError(404, "There is no contact");
     }
+
     res.json(result);
   } catch (err) {
     next(err);

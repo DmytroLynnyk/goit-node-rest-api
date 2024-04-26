@@ -11,3 +11,7 @@ export const createUserSchema = Joi.object({
     "any.required": "Password is required",
   }),
 });
+
+export const subscriptionSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});

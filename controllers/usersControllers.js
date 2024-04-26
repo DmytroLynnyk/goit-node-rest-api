@@ -2,7 +2,9 @@ import HttpError from "../helpers/HttpError.js";
 import {
   findUserByEmail,
   createUser,
-  updateUserWithToken,
+  addTokenUser,
+  deletTokenUser,
+  changeSubscription,
 } from "../services/usersServices.js";
 
 export const createNewUser = async (req, res, next) => {
@@ -34,7 +36,7 @@ export const loginUser = async (req, res, next) => {
       throw HttpError(401, "Email or password is wrong");
     }
 
-    const user = await updateUserWithToken(result._id);
+    const user = await addTokenUser(result._id);
 
     res.status(200).json({
       token: user.token,
@@ -43,6 +45,17 @@ export const loginUser = async (req, res, next) => {
         subscription: user.subscription,
       },
     });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
+export const logoutUser = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+    await deletTokenUser(_id);
+    res.status(204).json();
   } catch (err) {
     console.log(err);
     next(err);
@@ -58,6 +71,28 @@ export const getCurrentUser = async (req, res, next) => {
         subscription,
       },
     });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
+export const changeUserSubscription = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+    req.user.subscription = req.body.subscription;
+    const newSubscription = await changeSubscription(_id, {
+      subscription: req.user.subscription,
+    });
+
+    res
+      .status(200)
+      .json({
+        user: {
+          email: newSubscription.email,
+          subscription: newSubscription.subscription,
+        },
+      });
   } catch (err) {
     console.log(err);
     next(err);

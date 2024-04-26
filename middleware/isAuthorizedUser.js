@@ -13,7 +13,7 @@ export const isAuthorizedUser = async (req, res, next) => {
       const { id } = await verifyToken(token);
       const user = await User.findById(id);
 
-      if (!user) throw HttpError(401, "Not authorized");
+      if (!user || !user.token) throw HttpError(401, "Not authorized");
 
       req.user = user;
       next();

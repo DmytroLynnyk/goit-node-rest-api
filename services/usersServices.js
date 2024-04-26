@@ -16,7 +16,7 @@ export const verifyToken = async (token) => {
   return await jwt.verify(token, SECRET_KEY);
 };
 
-export const updateUserWithToken = async (id) => {
+export const addTokenUser = async (id) => {
   const token = signToken(id);
   const user = await User.findByIdAndUpdate(id, { token }, { new: true });
   return user;
@@ -26,6 +26,14 @@ export const createUser = async (userData) => {
   const newUser = new User(userData);
   await newUser.hashPassword();
   await newUser.save();
-  const user = updateUserWithToken(newUser._id);
+  return newUser;
+};
+
+export const deletTokenUser = async (id) => {
+  const user = await User.findByIdAndUpdate(id, { token: null });
   return user;
+};
+
+export const changeSubscription = async (id, userData) => {
+  return await User.findByIdAndUpdate(id, userData, { new: true });
 };

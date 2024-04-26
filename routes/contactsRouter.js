@@ -38,12 +38,14 @@ contactsRouter.post(
 
 contactsRouter.put(
   "/:contactId",
+  isAuthorizedUser,
   isValidId,
   validateBody(updateContactSchema),
   updateContact
 );
 contactsRouter.patch(
   "/:contactId/favorite",
+  isAuthorizedUser,
   isValidId,
   validateBody(updateFavoriteSchema),
   updateStatusContact
