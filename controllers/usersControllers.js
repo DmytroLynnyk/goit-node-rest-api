@@ -66,10 +66,8 @@ export const getCurrentUser = async (req, res, next) => {
   try {
     const { email, subscription } = req.user;
     res.status(200).json({
-      user: {
-        email,
-        subscription,
-      },
+      email,
+      subscription,
     });
   } catch (err) {
     console.log(err);
