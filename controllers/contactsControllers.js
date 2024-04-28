@@ -55,13 +55,11 @@ export const createContact = async (req, res, next) => {
 
 export const updateContact = async (req, res, next) => {
   try {
-    const result = await Contact.findByIdAndUpdate(
-      req.params.contactId,
-      req.body,
-      {
-        new: true,
-      }
-    );
+    const { id } = await checkOwner(req.params.contactId, req.user);
+
+    const result = await Contact.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
     res.json(result);
   } catch (err) {
     next(err);
@@ -70,13 +68,11 @@ export const updateContact = async (req, res, next) => {
 
 export const updateStatusContact = async (req, res, next) => {
   try {
-    const result = await Contact.findByIdAndUpdate(
-      req.params.contactId,
-      req.body,
-      {
-        new: true,
-      }
-    );
+    const { id } = await checkOwner(req.params.contactId, req.user);
+
+    const result = await Contact.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
     res.json(result);
   } catch (err) {
     next(err);
