@@ -1,6 +1,6 @@
-import HttpError from "../helpers/HttpError.js";
 import { isValidObjectId } from "mongoose";
-import { Contact } from "../models/contacts.js";
+import HttpError from "../helpers/HttpError.js";
+import { Contact } from "../db/models/contacts.js";
 
 export const isValidId = async (req, _, next) => {
   const { contactId } = req.params;
