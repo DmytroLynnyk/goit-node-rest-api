@@ -94,3 +94,14 @@ export const changeUserSubscription = async (req, res, next) => {
     next(err);
   }
 };
+
+export const createNewAvatar = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    console.log(req.file);
+    next();
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};

@@ -10,8 +10,10 @@ import {
   logoutUser,
   getCurrentUser,
   changeUserSubscription,
+  createNewAvatar,
 } from "../controllers/usersControllers.js";
 import { isAuthorizedUser } from "../middleware/isAuthorizedUser.js";
+import { upload } from "../middleware/avatarUpload.js";
 
 const usersRouter = express.Router();
 
@@ -29,5 +31,7 @@ usersRouter.patch(
   validateBody(subscriptionSchema),
   changeUserSubscription
 );
+
+usersRouter.patch("/avatars", upload.single("avatar"), createNewAvatar);
 
 export default usersRouter;
