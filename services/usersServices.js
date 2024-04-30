@@ -1,5 +1,7 @@
 import { User } from "../db/models/users.js";
 import jwt from "jsonwebtoken";
+import path from "node:path";
+import fs from "fs/promises";
 
 const { SECRET_KEY } = process.env;
 
@@ -38,3 +40,14 @@ export const changeSubscription = async (id, userData) => {
   const user = await User.findByIdAndUpdate(id, userData, { new: true });
   return user;
 };
+
+export const createUserAvatar = async (tempUpload, originalname) => {
+  const avatarsDir = path.join("public", "avatars/");
+  const resulUpload = path.join(avatarsDir, originalname);
+  await fs.rename(tempUpload, resulUpload);
+
+  const avatar = path.join("public", "avatars/", originalname);
+  return avatar;
+};
+
+export const generateAvatar = (email) => {};

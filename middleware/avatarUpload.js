@@ -1,7 +1,6 @@
 import path from "node:path";
 import multer from "multer";
 
-// MiddleWare
 const tmpDir = path.resolve("tmp");
 
 const multerConfig = multer.diskStorage({
@@ -14,4 +13,3 @@ const multerConfig = multer.diskStorage({
 export const upload = multer({
   storage: multerConfig,
 });
-// MiddleWare

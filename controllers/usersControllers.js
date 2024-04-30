@@ -5,6 +5,8 @@ import {
   addTokenUser,
   deletTokenUser,
   changeSubscription,
+  createUserAvatar,
+  generateAvatar,
 } from "../services/usersServices.js";
 
 export const createNewUser = async (req, res, next) => {
@@ -15,6 +17,8 @@ export const createNewUser = async (req, res, next) => {
     if (result) {
       throw HttpError(409, "Email in use");
     }
+
+    req.body.avatarURL = generateAvatar(email);
 
     const user = await createUser(req.body);
 
@@ -95,10 +99,11 @@ export const changeUserSubscription = async (req, res, next) => {
   }
 };
 
+// New function
 export const createNewAvatar = async (req, res, next) => {
   try {
-    console.log(req.body);
-    console.log(req.file);
+    const { path: tempUpload, originalname } = req.file;
+    createUserAvatar(tempUpload, originalname);
     next();
   } catch (err) {
     console.log(err);
