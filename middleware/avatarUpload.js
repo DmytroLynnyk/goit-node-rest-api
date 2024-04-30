@@ -6,6 +6,7 @@ const tmpDir = path.resolve("tmp");
 const multerConfig = multer.diskStorage({
   destination: tmpDir,
   filename: (req, file, cb) => {
+    // const extension = file.mimetype.split("/")[1];
     cb(null, file.originalname);
   },
 });

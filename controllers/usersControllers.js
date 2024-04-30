@@ -100,7 +100,7 @@ export const changeUserSubscription = async (req, res, next) => {
 };
 
 // New function
-export const createNewAvatar = async (req, res, next) => {
+export const uploadNewAvatar = async (req, res, next) => {
   try {
     const { path: tempUpload, originalname } = req.file;
     createUserAvatar(tempUpload, originalname);

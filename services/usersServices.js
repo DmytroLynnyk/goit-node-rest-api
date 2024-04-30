@@ -2,6 +2,8 @@ import { User } from "../db/models/users.js";
 import jwt from "jsonwebtoken";
 import path from "node:path";
 import fs from "fs/promises";
+import gravatar from "gravatar";
+import crypto from "crypto";
 
 const { SECRET_KEY } = process.env;
 
@@ -41,6 +43,15 @@ export const changeSubscription = async (id, userData) => {
   return user;
 };
 
+export const generateAvatar = (email) => {
+  const emailHash = crypto
+    .createHash("md5")
+    .update(email.toLowerCase())
+    .digest("hex");
+
+  return `https://gravatar.com/avatar/${emailHash}.jpg?d=wavatar`;
+};
+
 export const createUserAvatar = async (tempUpload, originalname) => {
   const avatarsDir = path.join("public", "avatars/");
   const resulUpload = path.join(avatarsDir, originalname);
@@ -49,5 +60,3 @@ export const createUserAvatar = async (tempUpload, originalname) => {
   const avatar = path.join("public", "avatars/", originalname);
   return avatar;
 };
-
-export const generateAvatar = (email) => {};
