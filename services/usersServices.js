@@ -1,9 +1,10 @@
-import { User } from "../db/models/users.js";
 import jwt from "jsonwebtoken";
 import path from "node:path";
 import fs from "fs/promises";
 import crypto from "crypto";
 import { nanoid } from "nanoid";
+
+import { User } from "../db/models/users.js";
 
 const { SECRET_KEY } = process.env;
 

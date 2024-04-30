@@ -104,7 +104,7 @@ export const changeUserSubscription = async (req, res, next) => {
 export const createNewAvatar = async (req, res, next) => {
   try {
     const { path: tempUpload, originalname } = req.file;
-    const { id, avatarURL } = req.user;
+    const { id } = req.user;
 
     const pathToAvatar = await moveAndRenameAvatar(
       tempUpload,
@@ -112,14 +112,13 @@ export const createNewAvatar = async (req, res, next) => {
       id
     );
 
-    // console.log(pathToAvatar.replace("public", ""));
-    // console.log(avatarURL);
-
     const updatedUser = await updateAvatar(req.user, pathToAvatar);
 
-    // updateAvatar(req.body, req.user, pathToAvatar);
-    console.log(updatedUser);
-    next();
+    console.log(updatedUser.avatarURL);
+
+    res.status(200).json({
+      avatarURL: updatedUser.avatarURL,
+    });
   } catch (err) {
     console.log(err);
     next(err);
