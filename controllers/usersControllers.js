@@ -117,7 +117,7 @@ export const createNewAvatar = async (req, res, next) => {
     console.log(updatedUser.avatarURL);
 
     res.status(200).json({
-      avatarURL: updatedUser.avatarURL,
+      avatarURL: req.user.avatarURL,
     });
   } catch (err) {
     console.log(err);
