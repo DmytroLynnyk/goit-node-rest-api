@@ -1,11 +1,12 @@
 import HttpError from "../helpers/HttpError.js";
+import { uploadAvatar } from "../middleware/avatarUpload.js";
 import {
   findUserByEmail,
   createUser,
   addTokenUser,
   deletTokenUser,
   changeSubscription,
-  createUserAvatar,
+  renameAvatar,
   generateAvatar,
 } from "../services/usersServices.js";
 
@@ -100,10 +101,11 @@ export const changeUserSubscription = async (req, res, next) => {
 };
 
 // New function
-export const uploadNewAvatar = async (req, res, next) => {
+export const makeAvatarPublic = async (req, res, next) => {
   try {
     const { path: tempUpload, originalname } = req.file;
-    createUserAvatar(tempUpload, originalname);
+    const { id } = req.user;
+    renameAvatar(tempUpload, originalname, id);
     next();
   } catch (err) {
     console.log(err);

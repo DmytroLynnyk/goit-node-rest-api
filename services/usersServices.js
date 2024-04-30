@@ -2,8 +2,8 @@ import { User } from "../db/models/users.js";
 import jwt from "jsonwebtoken";
 import path from "node:path";
 import fs from "fs/promises";
-import gravatar from "gravatar";
 import crypto from "crypto";
+import { nanoid } from "nanoid";
 
 const { SECRET_KEY } = process.env;
 
@@ -52,11 +52,16 @@ export const generateAvatar = (email) => {
   return `https://gravatar.com/avatar/${emailHash}.jpg?d=wavatar`;
 };
 
-export const createUserAvatar = async (tempUpload, originalname) => {
+export const renameAvatar = async (tempUpload, originalname, id) => {
   const avatarsDir = path.join("public", "avatars/");
-  const resulUpload = path.join(avatarsDir, originalname);
+
+  const extension = originalname.split(".").reverse()[0];
+  const avatarId = nanoid();
+  const newName = `${id}-${avatarId}.${extension}`;
+  const resulUpload = path.join(avatarsDir, newName);
+
   await fs.rename(tempUpload, resulUpload);
 
-  const avatar = path.join("public", "avatars/", originalname);
+  const avatar = path.join("public", "avatars/", newName);
   return avatar;
 };
