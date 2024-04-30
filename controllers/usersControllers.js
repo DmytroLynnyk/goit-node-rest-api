@@ -5,7 +5,7 @@ import {
   addTokenUser,
   deletTokenUser,
   changeSubscription,
-  moveAndRenameAvatar,
+  manipulateAvatar,
   generateAvatar,
   updateAvatar,
 } from "../services/usersServices.js";
@@ -100,19 +100,12 @@ export const changeUserSubscription = async (req, res, next) => {
   }
 };
 
-import Jimp from "jimp";
-
-// New function
 export const createNewAvatar = async (req, res, next) => {
   try {
     const { path: tempUpload, originalname } = req.file;
     const { id } = req.user;
 
-    const pathToAvatar = await moveAndRenameAvatar(
-      tempUpload,
-      originalname,
-      id
-    );
+    const pathToAvatar = await manipulateAvatar(tempUpload, originalname, id);
 
     const updatedUser = await updateAvatar(req.user, pathToAvatar);
 
