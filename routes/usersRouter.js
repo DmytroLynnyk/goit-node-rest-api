@@ -13,7 +13,7 @@ import {
   createNewAvatar,
 } from "../controllers/usersControllers.js";
 import { isAuthorizedUser } from "../middleware/isAuthorizedUser.js";
-import { uploadAvatar } from "../middleware/avatarUpload.js";
+import { uploadAvatar } from "../middleware/uploadAvatar.js";
 
 const usersRouter = express.Router();
 

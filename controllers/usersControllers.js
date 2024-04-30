@@ -100,6 +100,8 @@ export const changeUserSubscription = async (req, res, next) => {
   }
 };
 
+import Jimp from "jimp";
+
 // New function
 export const createNewAvatar = async (req, res, next) => {
   try {
@@ -114,10 +116,8 @@ export const createNewAvatar = async (req, res, next) => {
 
     const updatedUser = await updateAvatar(req.user, pathToAvatar);
 
-    console.log(updatedUser.avatarURL);
-
     res.status(200).json({
-      avatarURL: req.user.avatarURL,
+      avatarURL: updatedUser.avatarURL,
     });
   } catch (err) {
     console.log(err);
