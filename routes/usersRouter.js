@@ -10,7 +10,7 @@ import {
   logoutUser,
   getCurrentUser,
   changeUserSubscription,
-  makeAvatarPublic,
+  createNewAvatar,
 } from "../controllers/usersControllers.js";
 import { isAuthorizedUser } from "../middleware/isAuthorizedUser.js";
 import { uploadAvatar } from "../middleware/avatarUpload.js";
@@ -32,6 +32,6 @@ usersRouter.patch(
   changeUserSubscription
 );
 
-usersRouter.patch("/avatars", isAuthorizedUser, uploadAvatar, makeAvatarPublic);
+usersRouter.patch("/avatars", isAuthorizedUser, uploadAvatar, createNewAvatar);
 
 export default usersRouter;

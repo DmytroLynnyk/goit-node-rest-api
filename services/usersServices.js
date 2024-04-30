@@ -52,16 +52,25 @@ export const generateAvatar = (email) => {
   return `https://gravatar.com/avatar/${emailHash}.jpg?d=wavatar`;
 };
 
-export const renameAvatar = async (tempUpload, originalname, id) => {
+export const moveAndRenameAvatar = async (tempUpload, originalname, id) => {
   const avatarsDir = path.join("public", "avatars/");
 
   const extension = originalname.split(".").reverse()[0];
   const avatarId = nanoid();
   const newName = `${id}-${avatarId}.${extension}`;
+
   const resulUpload = path.join(avatarsDir, newName);
 
   await fs.rename(tempUpload, resulUpload);
 
   const avatar = path.join("public", "avatars/", newName);
   return avatar;
+};
+
+export const updateAvatar = async (user, pathToAvatar) => {
+  if (pathToAvatar) {
+    user.avatarURL = pathToAvatar.replace("public", "");
+  }
+
+  return user.save();
 };
