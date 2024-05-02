@@ -11,6 +11,7 @@ import {
   getCurrentUser,
   changeUserSubscription,
   changeUserAvatar,
+  checkUserVerification,
 } from "../controllers/usersControllers.js";
 import { isAuthorizedUser } from "../middleware/isAuthorizedUser.js";
 import { uploadAvatar } from "../middleware/uploadAvatar.js";
@@ -35,6 +36,6 @@ usersRouter.patch(
 usersRouter.patch("/avatars", isAuthorizedUser, uploadAvatar, changeUserAvatar);
 
 // New router for verification
-usersRouter.get("/verify/:verificationToken");
+usersRouter.get("/verify/:verificationToken", checkUserVerification);
 
 export default usersRouter;

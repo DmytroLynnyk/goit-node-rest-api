@@ -9,7 +9,7 @@ import {
   findUserByEmail,
   createUser,
   changeSubscription,
-  generateOtp,
+  generateToken,
   verifyUser,
   approveVerification,
 } from "../services/usersServices.js";
@@ -24,10 +24,10 @@ export const createNewUser = async (req, res, next) => {
     }
 
     req.body.avatarURL = generateAvatar(email);
-    req.body.verificationToken = generateOtp();
+    req.body.verificationToken = generateToken();
 
     // Clear verificationToken
-    // console.log(req.body.verificationToken);
+    console.log(req.body.verificationToken);
 
     const user = await createUser(req.body);
 

@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 export const createUser = async (userData) => {
   const newUser = new User(userData);
   await newUser.hashPassword();
-  await newUser.hashToken();
+  // await newUser.hashToken();
   await newUser.save();
   return newUser;
 };
@@ -19,9 +19,8 @@ export const changeSubscription = async (id, userData) => {
   return user;
 };
 
-export const generateOtp = () => {
+export const generateToken = () => {
   const otp = nanoid();
-  // console.log(otp);
   return otp;
 };
 
