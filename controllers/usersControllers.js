@@ -9,6 +9,9 @@ import {
   findUserByEmail,
   createUser,
   changeSubscription,
+  generateOtp,
+  verifyUser,
+  approveVerification,
 } from "../services/usersServices.js";
 
 export const createNewUser = async (req, res, next) => {
@@ -21,11 +24,19 @@ export const createNewUser = async (req, res, next) => {
     }
 
     req.body.avatarURL = generateAvatar(email);
+    req.body.verificationToken = generateOtp();
+
+    // Clear verificationToken
+    // console.log(req.body.verificationToken);
 
     const user = await createUser(req.body);
 
     res.status(201).json({
-      user: { email: user.email, subscription: user.subscription },
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+        verificationToken: user.verificationToken,
+      },
     });
   } catch (err) {
     console.log(err);
@@ -112,6 +123,25 @@ export const changeUserAvatar = async (req, res, next) => {
 
     res.status(200).json({
       avatarURL: updatedUser.avatarURL,
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
+export const checkUserVerification = async (req, res, next) => {
+  try {
+    const verifiedUser = await verifyUser(req.params.verificationToken);
+
+    if (!verifiedUser) {
+      throw HttpError(400, "User not found");
+    }
+
+    approveVerification(verifiedUser);
+
+    res.status(200).json({
+      message: "Verification successful",
     });
   } catch (err) {
     console.log(err);

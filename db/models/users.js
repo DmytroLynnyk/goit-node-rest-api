@@ -23,6 +23,15 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    // passwordResetToken
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
   },
   {
     versionKey: false,
@@ -37,6 +46,14 @@ userSchema.methods.hashPassword = async function () {
 
 userSchema.methods.comparePassword = function (password) {
   return bcryptjs.compareSync(password, this.password);
+};
+
+userSchema.methods.hashToken = async function () {
+  this.verificationToken = await bcryptjs.hash(this.verificationToken, 10);
+};
+
+userSchema.methods.compareToken = function (verificationToken) {
+  return bcryptjs.compareSync(verificationToken, this.verificationToken);
 };
 
 export const User = model("user", userSchema);

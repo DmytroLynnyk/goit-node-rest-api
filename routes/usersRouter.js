@@ -34,4 +34,7 @@ usersRouter.patch(
 
 usersRouter.patch("/avatars", isAuthorizedUser, uploadAvatar, changeUserAvatar);
 
+// New router for verification
+usersRouter.get("/verify/:verificationToken");
+
 export default usersRouter;
