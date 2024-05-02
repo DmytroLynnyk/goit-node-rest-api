@@ -1,6 +1,6 @@
 import { User } from "../db/models/users.js";
 import HttpError from "../helpers/HttpError.js";
-import { verifyToken } from "../services/usersServices.js";
+import { verifyToken } from "../services/jwtServices.js";
 
 export const isAuthorizedUser = async (req, res, next) => {
   try {
