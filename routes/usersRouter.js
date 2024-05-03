@@ -4,7 +4,6 @@ import {
   emailSchema,
   subscriptionSchema,
 } from "../schemas/usersSchemas.js";
-import validateBody from "../helpers/validateBody.js";
 import {
   createNewUser,
   loginUser,
@@ -14,9 +13,10 @@ import {
   changeUserAvatar,
   checkUserVerification,
   sendEmailVerification,
-} from "../controllers/usersControllers.js";
+} from "../controllers/userControllers.js";
 import { isAuthorizedUser } from "../middleware/isAuthorizedUser.js";
 import { uploadAvatar } from "../middleware/uploadAvatar.js";
+import validateBody from "../helpers/validateBody.js";
 
 const usersRouter = express.Router();
 
@@ -42,10 +42,8 @@ usersRouter.patch(
 
 usersRouter.patch("/avatars", isAuthorizedUser, uploadAvatar, changeUserAvatar);
 
-// New router for verification
 usersRouter.get("/verify", validateBody(emailSchema), sendEmailVerification);
 
 usersRouter.get("/verify/:verificationToken", checkUserVerification);
-//
 
 export default usersRouter;

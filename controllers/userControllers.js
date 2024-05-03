@@ -3,20 +3,21 @@ import {
   generateAvatar,
   manipulateAvatar,
   updateAvatar,
-} from "../services/avatarsServices.js";
+} from "../services/avatarServices.js";
+import { emailService } from "../services/emailServices.js";
 import { addTokenUser, deletTokenUser } from "../services/jwtServices.js";
 import {
   findUserByEmail,
   createUser,
   changeSubscription,
-  generateToken,
-  verifyUser,
+} from "../services/userServices.js";
+import {
   approveVerification,
-  emailService,
-} from "../services/usersServices.js";
+  generateOtp,
+  verifyUser,
+} from "../services/verificationService.js";
 
 // Users controllers
-
 export const createNewUser = async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -27,9 +28,12 @@ export const createNewUser = async (req, res, next) => {
     }
 
     req.body.avatarURL = generateAvatar(email);
-    req.body.verificationToken = generateToken();
+    req.body.verificationToken = generateOtp();
 
     const user = await createUser(req.body);
+    const host = req.get("host");
+
+    await emailService(req.protocol, host, user.verificationToken);
 
     res.status(201).json({
       user: {
@@ -47,6 +51,7 @@ export const createNewUser = async (req, res, next) => {
 export const getCurrentUser = async (req, res, next) => {
   try {
     const { email, subscription } = req.user;
+
     res.status(200).json({
       email,
       subscription,
@@ -60,7 +65,9 @@ export const getCurrentUser = async (req, res, next) => {
 export const changeUserSubscription = async (req, res, next) => {
   try {
     const { _id } = req.user;
+
     req.user.subscription = req.body.subscription;
+
     const newSubscription = await changeSubscription(_id, {
       subscription: req.user.subscription,
     });
@@ -102,7 +109,7 @@ export const loginUser = async (req, res, next) => {
 
     const result = await findUserByEmail(email);
     if (!result || !result.verify || !result.comparePassword(password)) {
-      throw HttpError(401, "Email or password is wrong");
+      throw HttpError(401);
     }
 
     const user = await addTokenUser(result._id);
@@ -161,11 +168,9 @@ export const sendEmailVerification = async (req, res, next) => {
     if (user.verify)
       throw HttpError(400, "Verification has already been passed");
 
-    const url = `${req.protocol}://${req.get("host")}/api/users/verify/${
-      user.verificationToken
-    }`;
+    const host = req.get("host");
 
-    await emailService(email, url);
+    await emailService(req.protocol, host, user.verificationToken);
 
     res.status(200).json({
       message: "Verification email sent",

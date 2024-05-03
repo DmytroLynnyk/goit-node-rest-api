@@ -1,6 +1,6 @@
 import HttpError from "../helpers/HttpError.js";
 import { Contact } from "../db/models/contacts.js";
-import { checkOwner } from "../services/contactsServices.js";
+import { checkOwner } from "../services/contactServices.js";
 
 export const getAllContacts = async (req, res, next) => {
   try {
