@@ -41,7 +41,6 @@ export const approveVerification = async (verifiedUser) => {
   return user;
 };
 
-// Emails service (need to receive user)
 export const emailService = async (email, url) => {
   const transportConfig = {
     host: "smtp.meta.ua",
@@ -57,7 +56,8 @@ export const emailService = async (email, url) => {
 
   const emailConfig = {
     from: process.env.EMAIL_USER,
-    to: email,
+    // to: email,
+    to: "20041989@ua.fm",
     subject: "EMAIL VERIFICATION",
     html: emailTemplate(url),
     text: "Tap the link to complete your registration and enjoy our services!",
