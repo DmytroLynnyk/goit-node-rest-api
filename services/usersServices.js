@@ -1,5 +1,7 @@
 import { User } from "../db/models/users.js";
 import { nanoid } from "nanoid";
+import nodemailer from "nodemailer";
+import { emailTemplate } from "../helpers/__emailTemplate.js";
 
 export const createUser = async (userData) => {
   const newUser = new User(userData);
@@ -37,4 +39,33 @@ export const approveVerification = async (verifiedUser) => {
   });
 
   return user;
+};
+
+// Emails service (need to receive user)
+export const emailService = async (email, url) => {
+  const transportConfig = {
+    host: "smtp.meta.ua",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  };
+
+  const emailTransport = nodemailer.createTransport(transportConfig);
+
+  const emailConfig = {
+    from: process.env.EMAIL_USER,
+    // to: email,
+    to: "20041989@ua.fm",
+    subject: "EMAIL VERIFICATION",
+    html: emailTemplate(url),
+    text: "Tap the link to complete your registration and enjoy our services!",
+  };
+
+  await emailTransport
+    .sendMail(emailConfig)
+    .then((info) => console.log(info))
+    .catch((err) => console.log(err));
 };

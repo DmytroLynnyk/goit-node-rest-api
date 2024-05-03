@@ -12,7 +12,10 @@ import {
   generateToken,
   verifyUser,
   approveVerification,
+  emailService,
 } from "../services/usersServices.js";
+
+// Users controllers
 
 export const createNewUser = async (req, res, next) => {
   try {
@@ -35,41 +38,6 @@ export const createNewUser = async (req, res, next) => {
         verificationToken: user.verificationToken,
       },
     });
-  } catch (err) {
-    console.log(err);
-    next(err);
-  }
-};
-
-export const loginUser = async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
-
-    const result = await findUserByEmail(email);
-    if (!result || !result.verify || !result.comparePassword(password)) {
-      throw HttpError(401, "Email or password is wrong");
-    }
-
-    const user = await addTokenUser(result._id);
-
-    res.status(200).json({
-      token: user.token,
-      user: {
-        email: user.email,
-        subscription: user.subscription,
-      },
-    });
-  } catch (err) {
-    console.log(err);
-    next(err);
-  }
-};
-
-export const logoutUser = async (req, res, next) => {
-  try {
-    const { _id } = req.user;
-    await deletTokenUser(_id);
-    res.status(204).json();
   } catch (err) {
     console.log(err);
     next(err);
@@ -127,6 +95,43 @@ export const changeUserAvatar = async (req, res, next) => {
   }
 };
 
+// Auth controllers
+export const loginUser = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const result = await findUserByEmail(email);
+    if (!result || !result.verify || !result.comparePassword(password)) {
+      throw HttpError(401, "Email or password is wrong");
+    }
+
+    const user = await addTokenUser(result._id);
+
+    res.status(200).json({
+      token: user.token,
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
+export const logoutUser = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+    await deletTokenUser(_id);
+    res.status(204).json();
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
+// Verification controllers
 export const checkUserVerification = async (req, res, next) => {
   try {
     const verifiedUser = await verifyUser(req.params.verificationToken);
@@ -139,6 +144,31 @@ export const checkUserVerification = async (req, res, next) => {
 
     res.status(200).json({
       message: "Verification successful",
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
+export const sendEmailVerification = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const user = await findUserByEmail(email);
+
+    if (!user) throw HttpError(404, "User not found");
+
+    if (user.verify)
+      throw HttpError(400, "Verification has already been passed");
+
+    const url = `${req.protocol}://${req.get("host")}/api/users/verify/${
+      user.verificationToken
+    }`;
+
+    await emailService(email, url);
+
+    res.status(200).json({
+      message: "Verification email sent",
     });
   } catch (err) {
     console.log(err);
