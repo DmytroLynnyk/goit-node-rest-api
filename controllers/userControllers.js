@@ -33,7 +33,7 @@ export const createNewUser = async (req, res, next) => {
     const user = await createUser(req.body);
     const host = req.get("host");
 
-    await emailService(req.protocol, host, user.verificationToken);
+    await emailService(req.protocol, host, user.verificationToken, user.email);
 
     res.status(201).json({
       user: {
@@ -170,7 +170,7 @@ export const sendEmailVerification = async (req, res, next) => {
 
     const host = req.get("host");
 
-    await emailService(req.protocol, host, user.verificationToken);
+    await emailService(req.protocol, host, user.verificationToken, user.email);
 
     res.status(200).json({
       message: "Verification email sent",

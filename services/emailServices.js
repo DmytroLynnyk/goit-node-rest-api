@@ -13,7 +13,12 @@ const transportConfig = {
 
 const emailTransport = nodemailer.createTransport(transportConfig);
 
-export const emailService = async (protocol, host, verificationToken) => {
+export const emailService = async (
+  protocol,
+  host,
+  verificationToken,
+  email
+) => {
   const url = `${protocol}://${host}/api/users/verify/${verificationToken}`;
 
   const emailConfig = {
