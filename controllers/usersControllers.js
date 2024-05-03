@@ -26,9 +26,6 @@ export const createNewUser = async (req, res, next) => {
     req.body.avatarURL = generateAvatar(email);
     req.body.verificationToken = generateToken();
 
-    // Clear verificationToken
-    console.log(req.body.verificationToken);
-
     const user = await createUser(req.body);
 
     res.status(201).json({
@@ -49,7 +46,7 @@ export const loginUser = async (req, res, next) => {
     const { email, password } = req.body;
 
     const result = await findUserByEmail(email);
-    if (!result || !result.comparePassword(password)) {
+    if (!result || !result.verify || !result.comparePassword(password)) {
       throw HttpError(401, "Email or password is wrong");
     }
 

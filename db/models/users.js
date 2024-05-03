@@ -48,10 +48,6 @@ userSchema.methods.comparePassword = function (password) {
   return bcryptjs.compareSync(password, this.password);
 };
 
-// userSchema.methods.hashToken = async function () {
-//   this.verificationToken = await bcryptjs.hash(this.verificationToken, 10);
-// };
-
 userSchema.methods.compareToken = function (verificationToken) {
   return bcryptjs.compareSync(verificationToken, this.verificationToken);
 };

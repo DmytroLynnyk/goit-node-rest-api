@@ -4,7 +4,6 @@ import { nanoid } from "nanoid";
 export const createUser = async (userData) => {
   const newUser = new User(userData);
   await newUser.hashPassword();
-  // await newUser.hashToken();
   await newUser.save();
   return newUser;
 };
