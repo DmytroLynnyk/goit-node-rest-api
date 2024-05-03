@@ -18,8 +18,7 @@ export const emailService = async (protocol, host, verificationToken) => {
 
   const emailConfig = {
     from: process.env.EMAIL_USER,
-    // to: email,
-    to: "20041989@ua.fm",
+    to: email,
     subject: "EMAIL VERIFICATION",
     html: emailTemplate(url),
     text: "Tap the link to complete your registration and enjoy our services!",
