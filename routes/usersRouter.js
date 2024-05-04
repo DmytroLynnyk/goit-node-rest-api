@@ -42,7 +42,7 @@ usersRouter.patch(
 
 usersRouter.patch("/avatars", isAuthorizedUser, uploadAvatar, changeUserAvatar);
 
-usersRouter.get("/verify", validateBody(emailSchema), sendEmailVerification);
+usersRouter.post("/verify", validateBody(emailSchema), sendEmailVerification);
 
 usersRouter.get("/verify/:verificationToken", checkUserVerification);
 
